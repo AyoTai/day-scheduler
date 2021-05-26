@@ -40,6 +40,10 @@ tableRow.on("blur", "input", function (){
 tableRow.on("click", saveBtn, function (){
     $("body").find("input").val();
     console.log($("body").find("input").val())
+
+    var timeIndex = tableRow.parent().parent().children().attr("class").replace(" workHour", "");
+    findArray(timeIndex);
+    setLS();
 })
 
 console.log($("body").find("input").val());
@@ -56,6 +60,22 @@ function findArray(time) {
     }
 }
 
+function savedSched(){
+    if (timeDuty === undefined){
+        return;
+    } else {
+        for (var i = 0; i < timeDuty.length; i++){
+            var hour = timeDuty[i]["time"];
+            var hourTest = '.' + hour;
+            var input = timeDuty[i]["input"];
+
+            selector = $(hourTest).find(".p-content");
+            selector.text(input);
+        }
+    }
+}
+
+
 // Local Storage
 function setLS() {
     localStorage.setItem("timeDuty", JSON.stringify(tasks));
@@ -64,3 +84,6 @@ function setLS() {
 function getLocalStorage() {
     time = JSON.parse(localStorage.getItem("timeDuty"));
 }
+
+getLocalStorage();
+savedSched();
