@@ -28,22 +28,22 @@ currentDay = setInterval(function () {
 
 // Creating text input //
 tableRow.on("click", ".content", function (){
-    var inputText = $("<input type ='text'>"); //
+    var inputText = $("<input class='p-content' input type ='text'>"); //
     $(this).children().replaceWith(inputText);
     inputText.trigger("focus");
 })
 
 tableRow.on("blur", "input", function (){
     inputTextValue = $(this).val();
-    var empty = $("<p class='p-content'>").append($(this).find("input").val()); //
+    var empty = $("<p class='p-content'>").append(inputTextValue); //
     $(this).replaceWith(empty);
 })
 
 // Save Button 
 tableRow.on("click", saveBtn, function (){
-    var userInput = $(this).find("input").val();
+    var userInput = $(this).find(".p-content").text();
     // console.log($(this).find(".workHour").attr("class").split(" ")[0])
-    console.log(userInput);
+    // console.log(userInput);
     var timeIndex = $(this).find(".workHour").attr("class").split(" ")[0]
     findArray(timeIndex, userInput);
     setLS(userInput);
@@ -59,8 +59,7 @@ function findArray(time, userInput) {
                 timeDuty[i]["input"] = userInput;
             }
         }
-        console.log("setting timeDuty")
-        console.log(timeDuty)
+        // console.log(timeDuty)
     }
 }
 
@@ -84,7 +83,7 @@ function timeColorCode(time){
     return moment().isAfter(moment(time, "h:mm A"));
 }
 
-// Functino to change color by time
+// Functin to change color by time
 function timeCheck() {
     if (timeDuty === undefined || null){
         return;
@@ -123,7 +122,7 @@ function getLS() {
 }
 
 // getLS();
-savedSched();
+// savedSched();
 timeCheck();
 
 setInterval(function (){
