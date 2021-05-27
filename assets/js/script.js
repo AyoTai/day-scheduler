@@ -4,12 +4,17 @@ var timeDuty = [
     { time: "time1000", input: "" },
     { time: "time1100", input: "" },
     { time: "time1200", input: "" },
-    { time: "time0100", input: "" },
-    { time: "time0200", input: "" },
-    { time: "time0300", input: "" },
-    { time: "time0400", input: "" },
-    { time: "time0500", input: "" },
+    { time: "time1300", input: "" },
+    { time: "time1400", input: "" },
+    { time: "time1500", input: "" },
+    { time: "time1600", input: "" },
+    { time: "time1700", input: "" },
 ]
+var timeSet = ["9", "10", "11", "12", "1", "2", "3", "4", "5"];
+var timeSet2 = ["9:00", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"];
+var timeSet3 = ["0900", "1000", "1100", "1200", "1300", "1400", "1500", "1600", "1700"]
+
+var currentHour = moment().format("H");
 
 // Selectors //
 var saveBtn = $("#saveBtn");
@@ -46,10 +51,9 @@ tableRow.on("click", saveBtn, function (){
     setLS();
 })
 
-console.log($("body").find("input").val());
 
 function findArray(time) {
-    if(timeDuty === undefined){
+    if(!timeDuty){
         return;
     } else {
         for (var i = 0; i < timeDuty.length; i++){
@@ -60,8 +64,9 @@ function findArray(time) {
     }
 }
 
+
 function savedSched(){
-    if (timeDuty === undefined){
+    if (!timeDuty){
         return;
     } else {
         for (var i = 0; i < timeDuty.length; i++){
@@ -75,15 +80,51 @@ function savedSched(){
     }
 }
 
+function timeColorCode(time){
+    return moment().isAfter(moment(time, "h:mm A"));
+}
+
+// Functino to change color by time
+function timeCheck() {
+    if (!timeDuty){
+        return;
+    } else {
+        for (var i = 0; i < timeDuty.length; i++) {
+            if (timeColorCode(timeSet2[i]) === true){
+                selector = ".time" + timeSet3[i];
+                $(selector).css({"background-color": "grey"});
+            } else if (timeColorCode(timeSet2[i]) === false){
+                selector = ".time" + timeSet3[i];
+                $(selector).css({"background-color": "blue"});
+            }
+        }
+        for (var i = 0;i < timeDuty.length; i++){
+            if (currentHour === timeSet[i]){
+                selector = ".time" + timeSet3[i];
+                $(selector).css({"background-color": "green"});
+            }
+        }
+    }
+}
+
 
 // Local Storage
 function setLS() {
     localStorage.setItem("timeDuty", JSON.stringify(tasks));
 }
 
-function getLocalStorage() {
-    time = JSON.parse(localStorage.getItem("timeDuty"));
+function getLS() {
+    if (localStorage.getItem("timeDuty") === undefined){
+        return;
+    } else {
+        timeDuty = JSON.parse(localStorage.getItem("timeDuty"));
+    }
 }
 
-getLocalStorage();
+getLS();
 savedSched();
+timeCheck();
+
+setInterval(function (){
+    timeCheck();
+}, 1000)
