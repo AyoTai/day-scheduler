@@ -13,11 +13,10 @@ var timeDuty = [
 var timeSet = ["9", "10", "11", "12", "1", "2", "3", "4", "5"];
 var timeSet2 = ["9:00", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"];
 var timeSet3 = ["0900", "1000", "1100", "1200", "1300", "1400", "1500", "1600", "1700"]
-
 var currentHour = moment().format("H");
 
 // Selectors //
-var saveBtn = $("#saveBtn");
+var saveBtn = $(".saveBtn");
 var tableRow = $("tr");
   
   
@@ -36,36 +35,38 @@ tableRow.on("click", ".content", function (){
 
 tableRow.on("blur", "input", function (){
     inputTextValue = $(this).val();
-    var empty = $("<p class='p-content'>"); //
+    var empty = $("<p class='p-content'>").append($(this).find("input").val()); //
     $(this).replaceWith(empty);
 })
 
 // Save Button 
 tableRow.on("click", saveBtn, function (){
-    $("body").find("input").val();
-    console.log($("body").find("input").val())
-
-    var timeIndex = $(this).parent().parent().children().attr("class").replace(" workHour", "");
-    findArray(timeIndex);
-    setLS();
+    var userInput = $(this).find("input").val();
+    // console.log($(this).find(".workHour").attr("class").split(" ")[0])
+    console.log(userInput);
+    var timeIndex = $(this).find(".workHour").attr("class").split(" ")[0]
+    findArray(timeIndex, userInput);
+    setLS(userInput);
 })
 
 
-function findArray(time) {
-    if(!timeDuty){
+function findArray(time, userInput) {
+    if (timeDuty === undefined){
         return;
     } else {
         for (var i = 0; i < timeDuty.length; i++){
             if (timeDuty[i]["time"] === time){
-                timeDuty[i]["input"] = inputTextValue;
+                timeDuty[i]["input"] = userInput;
             }
         }
+        console.log("setting timeDuty")
+        console.log(timeDuty)
     }
 }
 
 
 function savedSched(){
-    if (!timeDuty){
+    if (timeDuty === undefined){
         return;
     } else {
         for (var i = 0; i < timeDuty.length; i++){
@@ -85,22 +86,22 @@ function timeColorCode(time){
 
 // Functino to change color by time
 function timeCheck() {
-    if (!timeDuty){
+    if (timeDuty === undefined || null){
         return;
     } else {
         for (var i = 0; i < timeDuty.length; i++) {
             if (timeColorCode(timeSet2[i]) === true){
                 selector = ".time" + timeSet3[i];
-                $(selector).css({ "background-color": "grey" });
+                $(selector).parent().css({ "background-color": "grey" });
             } else if (timeColorCode(timeSet2[i]) === false){
                 selector = ".time" + timeSet3[i];
-                $(selector).css({ "background-color": "blue" });
+                $(selector).parent().css({ "background-color": "blue" });
             }
         }
         for (var i = 0;i < timeDuty.length; i++){
             if (currentHour === timeSet[i]){
                 selector = ".time" + timeSet3[i];
-                $(selector).css({ "background-color": "green" });
+                $(selector).parent().css({ "background-color": "green" });
             }
         }
     }
@@ -108,11 +109,12 @@ function timeCheck() {
 
 
 // Local Storage
-function setLS() {
-    localStorage.setItem("timeDuty", JSON.stringify(tasks));
+function setLS(input) {
+    localStorage.setItem("timeDuty", JSON.stringify(timeDuty));
 }
 
 function getLS() {
+    // console.log(localStorage.getItem("timeDuty"))
     if (localStorage.getItem("timeDuty") === undefined){
         return;
     } else {
@@ -120,7 +122,7 @@ function getLS() {
     }
 }
 
-getLS();
+// getLS();
 savedSched();
 timeCheck();
 
