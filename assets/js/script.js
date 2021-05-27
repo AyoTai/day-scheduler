@@ -25,8 +25,7 @@ var tableRow = $("tr");
 currentDay = setInterval(function () {
     $('#currentDay').text(moment().format('MMMM Do YYYY, h:mm:ss A, dddd'));
 }, 1000);
-  
-console.log($('#currentDay'));
+
 
 // Creating text input //
 tableRow.on("click", ".content", function (){
@@ -46,7 +45,7 @@ tableRow.on("click", saveBtn, function (){
     $("body").find("input").val();
     console.log($("body").find("input").val())
 
-    var timeIndex = tableRow.parent().parent().children().attr("class").replace(" workHour", "");
+    var timeIndex = $(this).parent().parent().children().attr("class").replace(" workHour", "");
     findArray(timeIndex);
     setLS();
 })
@@ -92,16 +91,16 @@ function timeCheck() {
         for (var i = 0; i < timeDuty.length; i++) {
             if (timeColorCode(timeSet2[i]) === true){
                 selector = ".time" + timeSet3[i];
-                $(selector).css({"background-color": "grey"});
+                $(selector).css({ "background-color": "grey" });
             } else if (timeColorCode(timeSet2[i]) === false){
                 selector = ".time" + timeSet3[i];
-                $(selector).css({"background-color": "blue"});
+                $(selector).css({ "background-color": "blue" });
             }
         }
         for (var i = 0;i < timeDuty.length; i++){
             if (currentHour === timeSet[i]){
                 selector = ".time" + timeSet3[i];
-                $(selector).css({"background-color": "green"});
+                $(selector).css({ "background-color": "green" });
             }
         }
     }
