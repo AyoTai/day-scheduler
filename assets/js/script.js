@@ -20,7 +20,6 @@ var saveBtn = $(".saveBtn");
 var tableRow = $("tr");
   
   
-  
 currentDay = setInterval(function () {
     $('#currentDay').text(moment().format('MMMM Do YYYY, h:mm:ss A, dddd'));
 }, 1000);
@@ -65,7 +64,7 @@ function findArray(time, userInput) {
 
 
 function savedSched(){
-    if (timeDuty === undefined){
+    if (timeDuty === undefined || null){
         return;
     } else {
         for (var i = 0; i < timeDuty.length; i++){
@@ -73,8 +72,8 @@ function savedSched(){
             var hourTest = '.' + hour;
             var input = timeDuty[i]["input"];
 
-            selector = $(hourTest).find(".p-content");
-            selector.text(input);
+            var savedInput = $(hourTest).find(".p-content");
+            savedInput.text(input);
         }
     }
 }
@@ -94,7 +93,7 @@ function timeCheck() {
                 $(selector).parent().css({ "background-color": "grey" });
             } else if (timeColorCode(timeSet2[i]) === false){
                 selector = ".time" + timeSet3[i];
-                $(selector).parent().css({ "background-color": "blue" });
+                $(selector).parent().css({ "background-color": "lightblue" });
             }
         }
         for (var i = 0;i < timeDuty.length; i++){
@@ -114,15 +113,16 @@ function setLS(input) {
 
 function getLS() {
     // console.log(localStorage.getItem("timeDuty"))
-    if (localStorage.getItem("timeDuty") === undefined){
+    if (localStorage.getItem("timeDuty") === undefined || null){
         return;
     } else {
         timeDuty = JSON.parse(localStorage.getItem("timeDuty"));
+        console.log(timeDuty)
     }
 }
 
-// getLS();
-// savedSched();
+getLS();
+savedSched();
 timeCheck();
 
 setInterval(function (){
